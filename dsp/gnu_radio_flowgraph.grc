@@ -1,0 +1,160 @@
+options:
+  parameters:
+    author: Warda Masood
+    catch_exceptions: 'True'
+    category: '[BCI Platform]'
+    cmake_opt: ''
+    comment: "GNU Radio DSP Flowgraph for BCI Platform\nOpenBCI \u2192 Bandpass \u2192 Notch \u2192 LSL Out\nLatency: <3ms per block at 250 Hz\nSample rate: 250 Hz, 8 channels"
+    copyright: Al Nafi International College 2025
+    description: Real-time EEG signal processing for BCI platform
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: bci_eeg_pipeline
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: '1'
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: BCI EEG Real-Time DSP Pipeline
+    window_size: (1200,800)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+# ── Source: OpenBCI ZeroMQ input ─────────────────────────────────
+- name: zeromq_pull_source
+  id: zeromq_pull_source
+  parameters:
+    address: tcp://127.0.0.1:5555
+    comment: "Receives raw EEG float32 samples from\nRaspberry Pi edge gateway via ZeroMQ PUB/SUB.\nFormat: 8 floats per message = one 8-channel sample."
+    hwm: '100'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '8'
+  states:
+    coordinate: [8, 160]
+    state: enabled
+
+# ── Stage 1: Bandpass Filter 1-40 Hz ─────────────────────────────
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    comment: "Butterworth-equivalent FIR low-pass at 40 Hz.\nCombined with high-pass gives 1-40 Hz bandpass.\nLatency: <0.5ms at 250 Hz sample rate."
+    cutoff_freq: '40'
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    samp_rate: '250'
+    type: fir_filter_fff
+    width: '5'
+    win: window.WIN_HAMMING
+  states:
+    coordinate: [240, 160]
+    state: enabled
+
+- name: high_pass_filter_0
+  id: high_pass_filter
+  parameters:
+    comment: "High-pass at 1 Hz removes DC drift."
+    cutoff_freq: '1'
+    decim: '1'
+    gain: '1'
+    samp_rate: '250'
+    type: fir_filter_fff
+    width: '0.5'
+    win: window.WIN_HAMMING
+  states:
+    coordinate: [440, 160]
+    state: enabled
+
+# ── Stage 2: Notch Filter 50 Hz (EU) ─────────────────────────────
+- name: iir_filter_0
+  id: iir_filter
+  parameters:
+    comment: "IIR notch filter at 50 Hz (EU powerline).\nFor US deployments: change to 60 Hz.\nQ factor = 30 for narrow notch.\nLatency: <0.5ms."
+    fbtaps: iir_design.design_notch(50.0/125.0, Q=30)[1]
+    fftaps: iir_design.design_notch(50.0/125.0, Q=30)[0]
+    new_taps_on_change: 'True'
+    type: float
+    vlen: '1'
+  states:
+    coordinate: [640, 160]
+    state: enabled
+
+# ── ZeroMQ publisher to Python ICA/ASR stage ─────────────────────
+- name: zeromq_push_sink_0
+  id: zeromq_push_sink
+  parameters:
+    address: tcp://127.0.0.1:5556
+    comment: "Publishes filtered EEG to Python DSP stage.\nPython handles ICA (FastICA) and ASR (MNE)\nbecause they require matrix operations not\nnatively available in GNU Radio blocks."
+    hwm: '100'
+    key: ''
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '1'
+  states:
+    coordinate: [840, 160]
+    state: enabled
+
+# ── QT GUI: Real-time EEG display ────────────────────────────────
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    alpha1: '1.0'
+    comment: "Real-time EEG waveform display.\nShows 8 channels overlaid.\nUsed during electrode placement and QA."
+    entags: 'True'
+    gui_hint: ''
+    name: '"Live EEG (post-filter)"'
+    nconnections: '8'
+    size: '500'
+    srate: '250'
+    type: float
+    update_time: '0.04'
+  states:
+    coordinate: [840, 300]
+    state: enabled
+
+# ── Frequency display ─────────────────────────────────────────────
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    comment: "PSD display. Verify:\n- Alpha peak at 8-13 Hz (Oz channel)\n- Notch at 50 Hz\n- Bandpass cutoff at 40 Hz"
+    fc: '0'
+    fftsize: '256'
+    gui_hint: ''
+    name: '"EEG PSD"'
+    nconnections: '1'
+    showports: 'True'
+    srate: '250'
+    type: float
+    update_time: '0.1'
+  states:
+    coordinate: [640, 300]
+    state: enabled
+
+connections:
+- [zeromq_pull_source, '0', low_pass_filter_0, '0']
+- [low_pass_filter_0, '0', high_pass_filter_0, '0']
+- [high_pass_filter_0, '0', iir_filter_0, '0']
+- [iir_filter_0, '0', zeromq_push_sink_0, '0']
+- [iir_filter_0, '0', qtgui_time_sink_x_0, '0']
+- [iir_filter_0, '0', qtgui_freq_sink_x_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: v3.10.7.0

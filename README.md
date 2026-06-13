@@ -1,81 +1,5 @@
-bci-platform/ — complete project structure
+# 🧠 BCI Platform — Brain-Computer Interface for Assistive Technology
 
-📁 bci-platform/ (root)
-Config & root files
-.env.example · .gitignore · README.md
-requirements.txt · docker-compose.yml · Makefile
-
-📁 acquisition/ — OpenBCI hardware + EEG streaming
-__init__.py · openbci_board.py · lsl_streamer.py
-electrode_impedance.py · signal_quality.py · simulator.py
-
-📁 dsp/ — GNU Radio + MNE-Python signal processing
-bandpass_filter.py · notch_filter.py · ica_artifact_removal.py
-asr_cleaning.py · epoch_extraction.py · feature_vector.py · pipeline.py
-gnu_radio_flowgraph.grc
-
-📁 streaming/ — Apache Kafka + LSL real-time pipeline
-kafka_producer.py · kafka_consumer.py · lsl_bridge.py
-watchdog.py · schema_registry.py · kafka_config.py
-config/kafka-server.properties · config/kafka-topics.sh
-
-📁 ml/ — TensorFlow CNN + scikit-learn + adaptive calibration
-cnn_model.py · eegnet_model.py · sklearn_baseline.py
-train.py · evaluate.py · predict.py
-adaptive_calibration.py · transfer_learning.py
-model_registry.py · data_loader.py
-saved_models/
-
-📁 devices/ — ROS + Arduino + eye tracker + TTS
-ros_controller.py · wheelchair_driver.py · prosthetic_servo.py
-eye_tracker.py · multimodal_fusion.py · tts_engine.py · safety_watchdog.py
-arduino/servo_control.ino
-
-📁 neurofeedback/ — real-time feedback + gamification
-band_power.py · feedback_engine.py · gamification.py
-adaptive_difficulty.py · session_tracker.py
-
-📁 security/ — encryption, GDPR, privacy-preserving ML
-tls_config.py · aes_encryption.py · consent_manager.py
-data_anonymizer.py · differential_privacy.py · audit_logger.py · erasure_api.py
-certs/
-
-📁 api/ — FastAPI REST + WebSocket server
-main.py · websocket_handler.py
-routes/eeg.py · routes/devices.py · routes/ml.py · routes/consent.py
-middleware/auth.py · middleware/rate_limiter.py
-
-📁 dashboard/ — Plotly Dash + BrainViz clinical UI
-app.py · layout.py · callbacks.py
-brainviz_3d.py · eeg_plot.py · neurofeedback_panel.py
-
-📁 database/ — PostgreSQL + SQLAlchemy ORM
-models.py · session.py · crud.py · init_db.py
-migrations/
-
-📁 resilience/ — failure detection + recovery scenarios
-eeg_loss_handler.py · kafka_failover.py
-classifier_fallback.py · safe_state.py · incident_response.py
-
-📁 tests/ — pytest unit + integration + end-to-end
-test_acquisition.py · test_dsp.py · test_ml.py
-test_streaming.py · test_devices.py · test_security.py
-test_api.py · test_resilience.py · conftest.py
-
-📁 scripts/ — setup, demo runners, validation
-setup_kafka.sh · generate_certs.sh · run_pipeline.py
-demo_simulation.py · validate_iso14155.py · benchmark_latency.py
-
-📁 docs/ — architecture, API docs, compliance
-architecture.md · api_reference.md · risk_matrix.md
-ieee2857_compliance.md · iso14155_validation.md · fda510k_pathway.md
-deployment_guide.md · CHANGELOG.md# 🧠 BCI Platform — Brain-Computer Interface for Assistive Technology
-
-**EduQual Level 6 | Al Nafi International College**
-**Topic 42: Implementing BCI Platform with OpenBCI, Signal Processing, and ML**
-**Student: Warda Masood | Examiner: Chief Examiner Mr. Muhammad Faisal**
-
----
 
 ## What This Project Does
 
@@ -94,7 +18,7 @@ A complete, production-grade Brain-Computer Interface platform that:
 ## Quick Demo (No Hardware Needed)
 
 ```bash
-git clone https://github.com/wardamasood/bci-platform.git
+git clone https://github.com/Wareeday/bci-platform.git
 cd bci-platform
 python -m venv venv && source venv/bin/activate
 pip install numpy scipy scikit-learn   # minimal for demo

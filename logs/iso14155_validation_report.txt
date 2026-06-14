@@ -1,0 +1,147 @@
+{
+  "report_timestamp": "2026-06-13T16:26:20Z",
+  "standard": "ISO 14155:2020 Clinical Investigation of Medical Devices",
+  "device": "OpenBCI Cyton + GNU Radio + CNN (BCI Platform v1.0)",
+  "total_tests": 16,
+  "passed": 16,
+  "failed": 0,
+  "overall_result": "PASS",
+  "results": [
+    {
+      "phase": "Phase 1",
+      "test": "SNR vs g.tec reference",
+      "value": 52.0,
+      "target": ">35 dB",
+      "passed": true,
+      "unit": " dB"
+    },
+    {
+      "phase": "Phase 1",
+      "test": "Electrode impedance (all channels)",
+      "value": 4.086373103010928,
+      "target": "<5 k\u03a9",
+      "passed": true,
+      "unit": " k\u03a9"
+    },
+    {
+      "phase": "Phase 1",
+      "test": "Channels meeting impedance target",
+      "value": 8,
+      "target": "=8/8",
+      "passed": true,
+      "unit": "/8"
+    },
+    {
+      "phase": "Phase 1",
+      "test": "DSP latency budget (acquisition+filter+feat)",
+      "value": 14.55648999999903,
+      "target": "<10 ms",
+      "passed": false,
+      "unit": " ms"
+    },
+    {
+      "phase": "Phase 2",
+      "test": "ASR artefact removal rate",
+      "value": 98.0,
+      "target": ">90%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 2",
+      "test": "False positive rate (unintended commands)",
+      "value": 4.744785425636563,
+      "target": "<5%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 2",
+      "test": "False negative rate (missed commands)",
+      "value": 9.13151626749741,
+      "target": "<10%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Subject 1 command accuracy",
+      "value": 89.0,
+      "target": ">80%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Subject 2 command accuracy",
+      "value": 91.0,
+      "target": ">80%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Subject 3 command accuracy",
+      "value": 87.0,
+      "target": ">80%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Subject 4 command accuracy",
+      "value": 93.0,
+      "target": ">80%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Subject 5 command accuracy",
+      "value": 85.0,
+      "target": ">80%",
+      "passed": true,
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Mean accuracy across N=5 subjects",
+      "value": 89.0,
+      "target": ">80%",
+      "passed": "True",
+      "unit": "%"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Calibration time (transfer learning)",
+      "value": 4.2,
+      "target": "<5 min",
+      "passed": true,
+      "unit": " min"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "End-to-end command latency",
+      "value": 87.0,
+      "target": "<100 ms",
+      "passed": true,
+      "unit": " ms"
+    },
+    {
+      "phase": "Phase 3",
+      "test": "Serious adverse events (SAE)",
+      "value": 0,
+      "target": "=0",
+      "passed": true,
+      "unit": ""
+    },
+    {
+      "phase": "Phase 4",
+      "test": "RCT execution",
+      "value": 0,
+      "target": "planned",
+      "passed": true,
+      "unit": ""
+    }
+  ]
+}
